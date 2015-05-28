@@ -5,6 +5,15 @@ class AttributeGetter(object):
             setattr(self, key, val)
             self._setattrs.append(key)
 
+    def serialize(self):
+        data = {}
+        for key in self._setattrs:
+            if hasattr(getattr(self, key), "serialize"):
+                data[key] = getattr(self, key).serialize()
+            else:
+                data[key] = getattr(self, key)
+        return data
+
     def __repr__(self, detail_list=None):
         if detail_list is None:
             detail_list = self._setattrs
